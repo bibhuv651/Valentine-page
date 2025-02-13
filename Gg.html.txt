@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Will You Be My Valentine, Poty?</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      text-align: center;
+      background: linear-gradient(135deg, #ff7eb3, #ff758c);
+      padding: 50px;
+      color: #4a4a4a;
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    h1 {
+      color: #ffffff;
+      font-size: 3.5rem;
+      margin-bottom: 20px;
+      font-family: 'Dancing Script', cursive;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    }
+    button {
+      padding: 15px 30px;
+      font-size: 18px;
+      margin: 10px;
+      cursor: pointer;
+      border: none;
+      border-radius: 25px;
+      background-color: #ff4d6d;
+      color: white;
+      transition: background-color 0.3s ease;
+      font-family: 'Poppins', sans-serif;
+    }
+    button:hover {
+      background-color: #ff1a40;
+    }
+    .hidden {
+      display: none;
+    }
+    .message {
+      background: rgba(255, 255, 255, 0.9);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    input {
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      margin-top: 10px;
+      width: 80%;
+      font-family: 'Poppins', sans-serif;
+    }
+    .error-popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      z-index: 1000;
+      font-family: 'Poppins', sans-serif;
+    }
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+    }
+    .heart {
+      color: #ff4d6d;
+      font-size: 2rem;
+      animation: heartbeat 1.5s infinite;
+    }
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="valentine-background">
+    <h1>Will You Be My Valentine, Poty? <span class="heart">❤️</span></h1>
+    <div id="options">
+      <button onclick="handleResponse('yes')">Yes</button>
+      <button onclick="handleResponse('no')">No</button>
+    </div>
+
+    <div id="valentineMessage" class="hidden message">
+      <h2>💖 Yay, Poty! You Made My Day! 💖</h2>
+      <p>Dear Poty,</p>
+      <p>You are the most amazing person I know. Your smile lights up my world, and your kindness fills my heart with joy. I feel so lucky to have you in my life. Will you make this Valentine's Day unforgettable with me?</p>
+      <p>With all my love,</p>
+      <p>Your Secret Admirer 💕</p>
+    </div>
+
+    <div id="reasonSection" class="hidden message">
+      <h2>Why Not, Poty? 😢</h2>
+      <p>Please tell me why you said no:</p>
+      <input type="text" id="reasonInput" placeholder="Type your reason here...">
+      <button onclick="submitReason()">Submit</button>
+    </div>
+
+    <div id="rethinkSection" class="hidden message">
+      <h2>Rethink Your Choice, Poty 🌹</h2>
+      <p>Are you sure about your decision? Maybe give it another thought?</p>
+      <button onclick="handleResponse('yes')">Yes, I'll be your Valentine!</button>
+      <button onclick="showErrorPopup()">No, I'm sure</button>
+    </div>
+  </div>
+
+  <div id="errorPopup" class="hidden error-popup">
+    <h2>404 Error Found 🚨</h2>
+    <p>Your reason could not be processed. Please try again by clicking "Yes."</p>
+    <button onclick="handleResponse('yes')">Yes, I'll be your Valentine!</button>
+  </div>
+  <div id="overlay" class="hidden overlay"></div>
+
+  <script>
+    let hasSaidNo = false; // Track if the user has clicked "No" at least once
+
+    function handleResponse(response) {
+      const valentineMessage = document.getElementById('valentineMessage');
+      const reasonSection = document.getElementById('reasonSection');
+      const rethinkSection = document.getElementById('rethinkSection');
+      const options = document.getElementById('options');
+      const errorPopup = document.getElementById('errorPopup');
+      const overlay = document.getElementById('overlay');
+
+      if (response === 'yes') {
+        valentineMessage.classList.remove('hidden');
+        reasonSection.classList.add('hidden');
+        rethinkSection.classList.add('hidden');
+        options.classList.add('hidden');
+        errorPopup.classList.add('hidden');
+        overlay.classList.add('hidden');
+
+        // Show the teasing message only if the user has clicked "No" before
+        if (hasSaidNo) {
+          alert("You can't say no, my baby! 🫣😂");
+        }
+      } else if (response === 'no') {
+        hasSaidNo = true; // Mark that the user has clicked "No"
+        reasonSection.classList.remove('hidden');
+        valentineMessage.classList.add('hidden');
+        rethinkSection.classList.add('hidden');
+        options.classList.add('hidden');
+      }
+    }
+
+    function submitReason() {
+      const reasonInput = document.getElementById('reasonInput').value;
+      if (reasonInput.trim() === "") {
+        alert("Please type a reason!");
+        return;
+      }
+      const reasonSection = document.getElementById('reasonSection');
+      const rethinkSection = document.getElementById('rethinkSection');
+      reasonSection.classList.add('hidden');
+      rethinkSection.classList.remove('hidden');
+    }
+
+    function showErrorPopup() {
+      const errorPopup = document.getElementById('errorPopup');
+      const overlay = document.getElementById('overlay');
+      errorPopup.classList.remove('hidden');
+      overlay.classList.remove('hidden');
+    }
+  </script>
+</body>
+</html>
+	◦	
